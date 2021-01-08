@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL));
 
 
-
         //Observable<String> animalObservable = getObservable();
         /*Observable<Notes> notesObservable = getObservable();
         DisposableObserver<Notes> notesObserver = getNotesObserver();
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayData(List<Posts> postsList) {
-        PostsAdapter adapter = new PostsAdapter(this,postsList);
+        PostsAdapter adapter = new PostsAdapter(this, postsList);
         rvPosts.setHasFixedSize(true);
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
         rvPosts.setAdapter(adapter);
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }*//*
 
-    *//* private Observer<String> getAnimalObserver(){
+     *//* private Observer<String> getAnimalObserver(){
          return new Observer<String>() {
              @Override
              public void onSubscribe(@NonNull Disposable d) {

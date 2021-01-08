@@ -10,28 +10,26 @@ import com.example.learningrxjava.R;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostViewHolder> {
-    Context context;
-    List<Posts> postsList;
+public class PostsAdapter extends RecyclerView.Adapter<PostsViewHolder> {
+    private Context context;
+    private List<Posts> postsList;
 
     public PostsAdapter(Context context, List<Posts> postsList) {
         this.context = context;
         this.postsList = postsList;
     }
 
-    @NonNull
     @Override
-    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_item, parent, false);
-        return new PostViewHolder(view);
+        return new PostsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+    public void onBindViewHolder(PostsViewHolder holder, int position) {
         Posts post = postsList.get(position);
         holder.tvTitle.setText(post.getTitle());
         holder.tvContent.setText(post.getBody());
