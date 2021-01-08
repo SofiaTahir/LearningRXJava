@@ -24,7 +24,7 @@ import static java.security.AccessController.getContext;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private CompositeDisposable disposable;
     private WebAPI api;
     private RecyclerView rvPosts;
 
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        disposable = new CompositeDisposable();
         Retrofit retrofit = RetrofitClient.getInstance();
         api = retrofit.create(WebAPI.class);
 
