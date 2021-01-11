@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LearningRxJava</string>
+    <string name="get_posts">Get Posts</string>
 </resources>

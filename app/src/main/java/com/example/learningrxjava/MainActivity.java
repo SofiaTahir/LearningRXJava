@@ -5,12 +5,18 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.learningrxjava.Model.Posts;
 import com.example.learningrxjava.Retrofit.RetrofitClient;
@@ -27,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private CompositeDisposable disposable;
     private WebAPI api;
     private RecyclerView rvPosts;
+    private Button btnGetPosts;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -38,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getInstance();
         api = retrofit.create(WebAPI.class);
 
-        rvPosts = findViewById(R.id.rv_posts);
-        rvPosts.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
+        initViews();
 
 
         //Observable<String> animalObservable = getObservable();
@@ -85,19 +91,53 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .subscribe(animalObserver);*/
-        callPostsService();
+        btnGetPosts.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            callPostsService();
+        });
+
+    }
+    private void initViews(){
+        progressBar = findViewById(R.id.progressBar);
+        btnGetPosts = findViewById(R.id.btn_get_posts);
+        rvPosts = findViewById(R.id.rv_posts);
+
+        progressBar.setVisibility(View.GONE);
+        rvPosts.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
+        rvPosts.setVisibility(View.GONE);
     }
 
     private void callPostsService() {
         disposable.add(api.getPosts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Posts>>() {
+                .subscribeWith(new DisposableObserver<List<Posts>>() {
+                    @Override
+                    public void onNext(@NonNull List<Posts> posts) {
+                        progressBar.setVisibility(View.GONE);
+                        btnGetPosts.setEnabled(false);
+                        displayData(posts);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Error in fetching data", Toast.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }));
+                /*.subscribe(new Consumer<List<Posts>>() {
                     @Override
                     public void accept(List<Posts> posts) throws Exception {
                         displayData(posts);
                     }
-                }));
+                }))*/
+        ;
     }
 
     private void displayData(List<Posts> postsList) {
@@ -105,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         rvPosts.setHasFixedSize(true);
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
         rvPosts.setAdapter(adapter);
+        rvPosts.setVisibility(View.VISIBLE);
     }
 
     /*private DisposableObserver<Notes> getNotesObserver() {
