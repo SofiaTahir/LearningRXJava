@@ -22,4 +22,10 @@ public class RetrofitClient {
                     .build();
         return retrofitInstance;
     }
+
+    private static WebAPI requestApi = getInstance().create(WebAPI.class);
+
+    public static WebAPI getRequestApi(){
+        return requestApi;
+    }
 }

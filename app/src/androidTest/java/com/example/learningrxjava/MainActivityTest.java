@@ -38,10 +38,10 @@ public class MainActivityTest {
     public void buttonWithText() {
         onView(withId(R.id.btn_get_posts)).check(matches(withText(R.string.get_posts)));
     }
-    @Test
+    /*@Test
     public void checkProgressBarDisplayedOnClick() {
         onView(withId(R.id.btn_get_posts)).perform(click());
         onView(withId(R.id.progressBar)).check(matches(isDisplayed()));
-    }
+    }*/
 
 }
